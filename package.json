@@ -1,0 +1,19 @@
+{
+  "name": "ifomenko-pet-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test-ui": "npx playwright test --ui",
+    "test-debug": "npx playwright test --debug"
+  },
+  "private": true,
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^26.4.1"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
+}
