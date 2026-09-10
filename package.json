@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test-ui": "npx playwright test --ui",
+    "ui-e2e": "npx playwright test --project=e2e-tests",
     "test-debug": "npx playwright test --debug"
   },
   "private": true,
