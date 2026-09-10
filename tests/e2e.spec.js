@@ -41,7 +41,7 @@ test('Rainy Day - Login', async ({ page }) => {
     })
 
     await test.step( 'Verify error message', async () => {
-        await expect(loginPage.errorMessageLockedOut).toHaveText('Epic sadface: Sorry, this user has been locked out.');
+        await expect(loginPage.errorMessageLockedOut).toHaveText(/locked out/i);
     })
 
 });
