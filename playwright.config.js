@@ -39,11 +39,21 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'e2e-tests',
-      testMatch:'e2e.spec.js',
+      name: 'setup',
+      testMatch: /auth\.setup\.js/,
       use: {
         baseURL: process.env.UI_URL,
       }
+    },
+    {
+      name: 'e2e-tests',
+      testMatch: /.*\.spec\.js/,
+      dependencies: ['setup'],
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: process.env.UI_URL,
+        storageState: 'playwright/.auth/user.json',
+      },
     },
     {
       name: 'chromium',
