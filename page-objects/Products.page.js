@@ -15,17 +15,16 @@ export class ProductsPage {
         });
         this.bikeLightName = this.bikeLight.locator('[data-test="inventory-item-name"]');
         this.bikeLightPrice = this.bikeLight.locator('[data-test="inventory-item-price"]');
-        this.bikeLightLink = this.bikeLight.getByRole('link', {
-            name: 'Sauce Labs Bike Light'
-        });
-        this.basketCount = this.page.locator('[data-test="shopping-cart-badge"]');
+        this.bikeLightLink = this.bikeLight.locator('[data-test="item-0-title-link"]');
+        this.cartCount = this.page.locator('[data-test="shopping-cart-badge"]');
+        this.cartButton = this.page.locator('[data-test="shopping-cart-link"]');
     }
 
     async selectAddToCart() {
         await this.backpackAddToCart.click()
     }
 
-    async selectLink() {
+    async selectBikeLightLink() {
         await this.bikeLightLink.click()
 
     }
@@ -42,6 +41,10 @@ export class ProductsPage {
             }
         }
 
+    }
+
+    async goToCart(){
+        await this.cartButton.click()
     }
 
 
