@@ -43,32 +43,38 @@ export default defineConfig({
       testMatch: /auth\.setup\.js/,
       use: {
         baseURL: process.env.UI_URL,
-      }
+      },
     },
+
+    {
+      name: 'login-tests',
+      testMatch: /login\.spec\.js/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: process.env.UI_URL,
+      },
+    },
+
     {
       name: 'e2e-tests',
-      testMatch: /.*\.spec\.js/,
+      testMatch: /e2e\.spec\.js/,
       dependencies: ['setup'],
       use: {
         ...devices['Desktop Chrome'],
         baseURL: process.env.UI_URL,
-        storageState: 'playwright/.auth/user.json',
+        storageState: '.auth/user.json',
       },
     },
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
-    },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
 
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
     // {

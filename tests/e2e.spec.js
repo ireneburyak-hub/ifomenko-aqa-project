@@ -1,57 +1,35 @@
 import { test, expect } from '@playwright/test';
-import {LoginPage} from "../page-objects/Login.page";
 import {ProductsPage} from "../page-objects/Products.page";
-import {sunnyUser, lockedUser} from '../data/testData'
 
-test.describe('Login functionality', () => {
-    test('Sunny Day - Login', async ({ page }) => {
-        const loginPage = new LoginPage(page);
+test.describe('E2E Check Order and Payments', () => {
+    test('Add products to Cart and Pay', async ({page}) => {
+
+
         const productsPage = new ProductsPage(page);
 
-        await test.step( 'Go to login page', async () => {
-            await loginPage.navigateToPage();
+        console.log(await page.context().cookies());
+
+        await page.goto('/inventory.html');
+        console.log(page.url());
+
+        await page.pause();
+
+        await test.step('Add backpack to cart', async () => {
+            await productsPage.selectAddToCart();
         })
 
-        await test.step( 'Verify elements on login page', async () => {
-            await expect(loginPage.loginLogo).toHaveText('Swag Labs');
-            await expect(loginPage.userNameField).toHaveAttribute('placeholder', 'Username');
-            await expect(loginPage.passwordField).toHaveAttribute('placeholder', 'Password');
-            await expect(loginPage.loginButton).toHaveText('Login');
-            await expect(loginPage.asseptedUserNames).toContainText('standard_user');
+        await test.step('Check count of basket is 1', async () => {
+            await expect(productsPage.basketCount).toHaveText('1')
         })
 
-        await test.step( 'Login to the system', async () => {
-            await loginPage.loginToSystem(sunnyUser.userName, sunnyUser.password);
-        })
+        //check Basket page
+        //checkout - checkout info
+        //check total price and that the same clothes are there
+        //finish - check finish page
+        //check Back Home
+        // check generated PDF order
 
-        await test.step( 'Verify Products page opened', async () => {
-            await expect(productsPage.pageTitle).toHaveText('Products');
-        })
-
-    });
-
-    test('Rainy Day - Login', async ({ page }) => {
-        const loginPage = new LoginPage(page);
-
-        await test.step( 'Go to login page', async () => {
-            await loginPage.navigateToPage();
-        })
-
-        await test.step( 'Login to the system', async () => {
-            await loginPage.loginToSystem(lockedUser.userName, lockedUser.password);
-        })
-
-        await test.step( 'Verify error message', async () => {
-            await expect(loginPage.errorMessageLockedOut).toHaveText(/locked out/i);
-        })
-
-    });
-
-})
-
-test.describe('E2E Check Payments', () => {
-
-
+    })
 })
 
 

@@ -17,5 +17,7 @@ export class LoginPage {
         await this.passwordField.fill(password);
         await this.loginButton.click()
     }
+
+
 }
 
