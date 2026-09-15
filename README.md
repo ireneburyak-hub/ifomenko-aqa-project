@@ -1,6 +1,6 @@
 # Playwright UI Automation Project
 
-A hands-on QA automation project created to practice and develop UI test automation using Playwright and TypeScript.
+A hands-on QA automation project created to practice and develop UI test automation using Playwright and JavaScript.
 
 ## Current coverage
 - Page Object Model
