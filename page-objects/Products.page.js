@@ -47,5 +47,4 @@ export class ProductsPage {
         await this.cartButton.click()
     }
 
-
 }
