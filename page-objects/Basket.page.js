@@ -38,4 +38,8 @@ export class BasketPage {
         await this.continueShoppingButton.click();
     }
 
+    async clickOnCartButton(){
+        await this.cartButton.click();
+    }
+
 }

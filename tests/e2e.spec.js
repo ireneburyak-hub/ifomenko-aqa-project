@@ -17,7 +17,7 @@ test.describe('E2E Check Order and Payments', () => {
 
         await page.goto('/inventory.html');
 
-        // Запам'ятовуємо дані товарів з Products
+        // remember products data from Products
         const productsInfo = await productsPage.getProductInfo();
 
         await test.step('Add backpack to cart', async () => {
@@ -88,8 +88,78 @@ test.describe('E2E Check Order and Payments', () => {
                 checkoutDetails.lastName, checkoutDetails.postalCode);
         })
 
-        await test.step('Navigate to Finish Order page', async () => {
+        await test.step('Navigate to Checkout Overview page', async () => {
             await checkoutUserDataPage.continue()
+        })
+
+        await test.step('Check title of Checkout Overview page', async () => {
+            await expect(checkoutOverviewPage.title).toHaveText('Checkout: Overview');
+        })
+
+        const checkoutProductInfo = await checkoutOverviewPage.getProductInCheckoutInfo()
+
+        await test.step('Compare products in Checkout with Products page', async () => {
+            expect(checkoutProductInfo.firstProductInCheckout.name)
+                .toBe(productsInfo.firstProduct.name);
+
+            expect(checkoutProductInfo.firstProductInCheckout.price)
+                .toBe(productsInfo.firstProduct.price);
+
+            expect(checkoutProductInfo.secondProductInCheckout.name)
+                .toBe(productsInfo.secondProduct.name);
+
+            expect(checkoutProductInfo.secondProductInCheckout.price)
+                .toBe(productsInfo.secondProduct.price);
+        });
+
+        await test.step('Check payment info and shipping info present', async () => {
+            await expect(checkoutOverviewPage.paymentInfo).toHaveText('Payment Information:');
+            await expect(checkoutOverviewPage.paymentValue).toHaveText(/SauceCard #\d+/)
+            await expect(checkoutOverviewPage.shippingInfo).toHaveText('Shipping Information:');
+            await expect(checkoutOverviewPage.shippingValue).toHaveText('Free Pony Express Delivery!')
+        })
+
+        const checkoutInfo = await checkoutOverviewPage.getCheckoutSummary();
+
+        const backpackPrice = parseFloat(
+            productsInfo.firstProduct.price.replace('$', '')
+        );
+
+        const bikeLightPrice = parseFloat(
+            productsInfo.secondProduct.price.replace('$', '')
+        );
+
+        const itemTotal = parseFloat(
+            checkoutInfo.itemTotal.replace('Item total: $', '')
+        );
+
+        const tax = parseFloat(
+            checkoutInfo.tax.replace('Tax: $', '')
+        );
+
+        const total = parseFloat(
+            checkoutInfo.total.replace('Total: $', '')
+        );
+
+        await test.step('Check Item Total', async () => {
+            const expectedItemTotal = backpackPrice + bikeLightPrice;
+            expect(itemTotal).toBeCloseTo(expectedItemTotal, 2);
+        });
+
+        await test.step('Check Tax', async () => {
+            const taxPercentage = (tax / itemTotal) * 100;
+
+            expect(taxPercentage).toBeCloseTo(8, 2);
+        });
+
+        await test.step('Check Total', async () => {
+            const expectedTotal = itemTotal + tax;
+
+            expect(total).toBeCloseTo(expectedTotal, 2);
+        });
+
+        await test.step('Finish Checkout', async () => {
+            await checkoutOverviewPage.finishCheckout()
         })
 
 
