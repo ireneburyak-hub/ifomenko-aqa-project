@@ -63,13 +63,10 @@ test.describe('E2E Order and Payment Flow', () => {
         await test.step('Compare cart products with Products page', async () => {
             expect(basketInfo.firstProductInCart.name)
                 .toBe(productsInfo.firstProduct.name);
-
             expect(basketInfo.firstProductInCart.price)
                 .toBe(productsInfo.firstProduct.price);
-
             expect(basketInfo.secondProductInCart.name)
                 .toBe(productsInfo.secondProduct.name);
-
             expect(basketInfo.secondProductInCart.price)
                 .toBe(productsInfo.secondProduct.price);
         });
@@ -110,13 +107,10 @@ test.describe('E2E Order and Payment Flow', () => {
         await test.step('Compare checkout products with Products page', async () => {
             expect(checkoutProductInfo.firstProductInCheckout.name)
                 .toBe(productsInfo.firstProduct.name);
-
             expect(checkoutProductInfo.firstProductInCheckout.price)
                 .toBe(productsInfo.firstProduct.price);
-
             expect(checkoutProductInfo.secondProductInCheckout.name)
                 .toBe(productsInfo.secondProduct.name);
-
             expect(checkoutProductInfo.secondProductInCheckout.price)
                 .toBe(productsInfo.secondProduct.price);
         });
