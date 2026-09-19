@@ -160,19 +160,16 @@ test.describe('E2E Order and Payment Flow', () => {
         // Validate the checkout calculations independently from the UI values
         await test.step('Check Item Total', async () => {
             const expectedItemTotal = backpackPrice + bikeLightPrice;
-
             expect(itemTotal).toBeCloseTo(expectedItemTotal, 2);
         });
 
         await test.step('Check Tax percentage', async () => {
             const taxPercentage = (tax / itemTotal) * 100;
-
             expect(taxPercentage).toBeCloseTo(8, 2);
         });
 
         await test.step('Check Total', async () => {
             const expectedTotal = itemTotal + tax;
-
             expect(total).toBeCloseTo(expectedTotal, 2);
         });
 
@@ -192,11 +189,8 @@ test.describe('E2E Order and Payment Flow', () => {
 
         await test.step('Download order PDF', async () => {
             const downloadPromise = page.waitForEvent('download');
-
             await finishOrderPage.generatePDF();
-
             const download = await downloadPromise;
-
             expect(download.suggestedFilename())
                 .toMatch(/\.pdf$/);
         });
