@@ -4,50 +4,52 @@ import {ProductDetails} from "../page-objects/ProductDetails.page";
 import {BasketPage} from "../page-objects/Basket.page";
 import {CheckoutUserDataPage} from "../page-objects/CheckoutUserData.page";
 import {CheckoutOverviewPage} from "../page-objects/CheckoutOverview.page";
+import {FinishOrderPage} from "../page-objects/FinishOrder.page";
 import {checkoutDetails} from "../data/testData";
 
-test.describe('E2E Check Order and Payments', () => {
-    test('Add products to Cart and Pay', async ({ page }) => {
+test.describe('E2E Order and Payment Flow', () => {
+    test('Complete order with two products', async ({ page }) => {
 
         const productsPage = new ProductsPage(page);
         const productDetailsPage = new ProductDetails(page);
         const basketPage = new BasketPage(page);
         const checkoutUserDataPage = new CheckoutUserDataPage(page);
         const checkoutOverviewPage = new CheckoutOverviewPage(page);
+        const finishOrderPage = new FinishOrderPage(page);
 
         await page.goto('/inventory.html');
 
-        // remember products data from Products
+        // Save product data to compare it throughout the checkout flow
         const productsInfo = await productsPage.getProductInfo();
 
-        await test.step('Add backpack to cart', async () => {
+        await test.step('Add Backpack to cart', async () => {
             await productsPage.selectAddToCart();
         });
 
-        await test.step('Check count of basket is 1', async () => {
+        await test.step('Check cart contains 1 item', async () => {
             await expect(productsPage.cartCount).toHaveText('1');
         });
 
-        await test.step('Navigate to bike light details page', async () => {
+        await test.step('Navigate to Bike Light details', async () => {
             await productsPage.selectBikeLightLink();
         });
 
         const detailsInfo = await productDetailsPage.getBikeLightInfo();
 
-        await test.step('Compare bike light info from products and details', async () => {
+        await test.step('Compare Bike Light with Products page', async () => {
             expect(detailsInfo.name).toBe(productsInfo.secondProduct.name);
             expect(detailsInfo.price).toBe(productsInfo.secondProduct.price);
         });
 
-        await test.step('Add bike light to the cart', async () => {
+        await test.step('Add Bike Light to cart', async () => {
             await productDetailsPage.addToCart();
         });
 
-        await test.step('Check count of basket is 2', async () => {
+        await test.step('Check cart contains 2 items', async () => {
             await expect(productsPage.cartCount).toHaveText('2');
         });
 
-        await test.step('Return back to Products', async () => {
+        await test.step('Return to Products', async () => {
             await productDetailsPage.backToProducts();
         });
 
@@ -57,7 +59,8 @@ test.describe('E2E Check Order and Payments', () => {
 
         const basketInfo = await basketPage.getProductInBasketInfo();
 
-        await test.step('Compare products in basket with Products page', async () => {
+        // Verify that product data remains unchanged after adding products to the cart
+        await test.step('Compare cart products with Products page', async () => {
             expect(basketInfo.firstProductInCart.name)
                 .toBe(productsInfo.firstProduct.name);
 
@@ -71,34 +74,40 @@ test.describe('E2E Check Order and Payments', () => {
                 .toBe(productsInfo.secondProduct.price);
         });
 
-        await test.step('Check count of basket on Basket page is 2', async () => {
+        await test.step('Check cart contains 2 items', async () => {
             await expect(basketPage.cartCount).toHaveText('2');
-        })
+        });
 
-        await test.step('Navigate to Checkout page', async () => {
-            await basketPage.checkout()
-        })
+        await test.step('Navigate to Checkout', async () => {
+            await basketPage.checkout();
+        });
 
-        await test.step('Check title of Checkout Page', async () => {
-            await expect(checkoutUserDataPage.title).toHaveText('Checkout: Your Information');
-        })
+        await test.step('Check Checkout page title', async () => {
+            await expect(checkoutUserDataPage.title)
+                .toHaveText('Checkout: Your Information');
+        });
 
         await test.step('Fill checkout details', async () => {
-            await checkoutUserDataPage.fillCheckoutDetails(checkoutDetails.firstName,
-                checkoutDetails.lastName, checkoutDetails.postalCode);
-        })
+            await checkoutUserDataPage.fillCheckoutDetails(
+                checkoutDetails.firstName,
+                checkoutDetails.lastName,
+                checkoutDetails.postalCode
+            );
+        });
 
-        await test.step('Navigate to Checkout Overview page', async () => {
-            await checkoutUserDataPage.continue()
-        })
+        await test.step('Navigate to Checkout Overview', async () => {
+            await checkoutUserDataPage.continue();
+        });
 
-        await test.step('Check title of Checkout Overview page', async () => {
-            await expect(checkoutOverviewPage.title).toHaveText('Checkout: Overview');
-        })
+        await test.step('Check Checkout Overview page title', async () => {
+            await expect(checkoutOverviewPage.title)
+                .toHaveText('Checkout: Overview');
+        });
 
-        const checkoutProductInfo = await checkoutOverviewPage.getProductInCheckoutInfo()
+        const checkoutProductInfo =
+            await checkoutOverviewPage.getProductInCheckoutInfo();
 
-        await test.step('Compare products in Checkout with Products page', async () => {
+        await test.step('Compare checkout products with Products page', async () => {
             expect(checkoutProductInfo.firstProductInCheckout.name)
                 .toBe(productsInfo.firstProduct.name);
 
@@ -112,12 +121,19 @@ test.describe('E2E Check Order and Payments', () => {
                 .toBe(productsInfo.secondProduct.price);
         });
 
-        await test.step('Check payment info and shipping info present', async () => {
-            await expect(checkoutOverviewPage.paymentInfo).toHaveText('Payment Information:');
-            await expect(checkoutOverviewPage.paymentValue).toHaveText(/SauceCard #\d+/)
-            await expect(checkoutOverviewPage.shippingInfo).toHaveText('Shipping Information:');
-            await expect(checkoutOverviewPage.shippingValue).toHaveText('Free Pony Express Delivery!')
-        })
+        await test.step('Check payment and shipping information', async () => {
+            await expect(checkoutOverviewPage.paymentInfo)
+                .toHaveText('Payment Information:');
+
+            await expect(checkoutOverviewPage.paymentValue)
+                .toHaveText(/SauceCard #\d+/);
+
+            await expect(checkoutOverviewPage.shippingInfo)
+                .toHaveText('Shipping Information:');
+
+            await expect(checkoutOverviewPage.shippingValue)
+                .toHaveText('Free Pony Express Delivery!');
+        });
 
         const checkoutInfo = await checkoutOverviewPage.getCheckoutSummary();
 
@@ -141,12 +157,14 @@ test.describe('E2E Check Order and Payments', () => {
             checkoutInfo.total.replace('Total: $', '')
         );
 
+        // Validate the checkout calculations independently from the UI values
         await test.step('Check Item Total', async () => {
             const expectedItemTotal = backpackPrice + bikeLightPrice;
+
             expect(itemTotal).toBeCloseTo(expectedItemTotal, 2);
         });
 
-        await test.step('Check Tax', async () => {
+        await test.step('Check Tax percentage', async () => {
             const taxPercentage = (tax / itemTotal) * 100;
 
             expect(taxPercentage).toBeCloseTo(8, 2);
@@ -159,15 +177,38 @@ test.describe('E2E Check Order and Payments', () => {
         });
 
         await test.step('Finish Checkout', async () => {
-            await checkoutOverviewPage.finishCheckout()
-        })
+            await checkoutOverviewPage.finishCheckout();
+        });
 
+        await test.step('Check order completion message', async () => {
+            await expect(finishOrderPage.title)
+                .toHaveText('Checkout: Complete!');
 
+            console.log(await finishOrderPage.message.count());
 
+            await expect(finishOrderPage.message)
+                .toHaveText('Thank you for your order!');
+        });
 
+        await test.step('Download order PDF', async () => {
+            const downloadPromise = page.waitForEvent('download');
+
+            await finishOrderPage.generatePDF();
+
+            const download = await downloadPromise;
+
+            expect(download.suggestedFilename())
+                .toMatch(/\.pdf$/);
+        });
+
+        await test.step('Return to Home page', async () => {
+            await finishOrderPage.backToHome();
+
+            await expect(productsPage.pageTitle)
+                .toHaveText('Products');
+        });
     });
 });
-
 
 
 //check Basket page
