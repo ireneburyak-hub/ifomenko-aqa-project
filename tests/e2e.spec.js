@@ -199,14 +199,6 @@ test.describe('E2E Order and Payment Flow', () => {
 });
 
 
-//check Basket page
-//checkout - checkout info
-//check total price and that the same clothes are there
-//finish - check finish page
-//check Back Home
-// check generated PDF order
-
-
 
 
 
