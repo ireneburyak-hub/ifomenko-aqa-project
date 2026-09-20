@@ -32,6 +32,7 @@ test.describe('E2E Order and Payment Flow', () => {
 
         await test.step('Navigate to Bike Light details', async () => {
             await productsPage.selectBikeLightLink();
+            await expect(page).toHaveURL(/inventory-item/);
         });
 
         const detailsInfo = await productDetailsPage.getBikeLightInfo();
