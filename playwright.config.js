@@ -16,6 +16,8 @@ dotenv.config({path: '.env'});
  */
 export default defineConfig({
   testDir: './tests',
+  /* Global Teardown path */
+  globalTeardown: './global-teardown.js',
   /* Run tests in files in parallel */
   fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -28,7 +30,12 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    timeout: 45*1000,
+    timezoneId:'Europe/London',
+    locale: 'en-US',
+    timeout: 60*1000,
+    actionTimeout: 10*1000,
+    navigationTimeout: 10*1000,
+    headless: true,
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
 
@@ -39,19 +46,42 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      name: 'setup',
+      testMatch: /auth\.setup\.js/,
+      use: {
+        baseURL: process.env.UI_URL,
+      },
     },
 
     {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      name: 'login-tests',
+      testMatch: /login\.spec\.js/,
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: process.env.UI_URL,
+      },
     },
 
     {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
+      name: 'e2e-tests',
+      testMatch: /e2e\.spec\.js/,
+      dependencies: ['setup'],
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: process.env.UI_URL,
+        storageState: '.auth/user.json',
+      },
     },
+
+    // {
+    //   name: 'firefox',
+    //   use: { ...devices['Desktop Firefox'] },
+    // },
+
+    // {
+    //   name: 'webkit',
+    //   use: { ...devices['Desktop Safari'] },
+    // },
 
     /* Test against mobile viewports. */
     // {

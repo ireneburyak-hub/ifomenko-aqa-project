@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "test-ui": "npx playwright test --ui",
+    "ui-e2e": "npx playwright test --project=e2e-tests",
     "test-debug": "npx playwright test --debug"
   },
   "private": true,
@@ -14,6 +14,7 @@
     "@types/node": "^26.4.1"
   },
   "dependencies": {
+    "@faker-js/faker": "^10.6.0",
     "dotenv": "^17.4.2"
   }
 }
