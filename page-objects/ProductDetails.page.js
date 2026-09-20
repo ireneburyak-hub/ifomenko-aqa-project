@@ -11,9 +11,6 @@ export class ProductDetails {
         await this.addToCartButton.click();
     }
     async getBikeLightInfo() {
-        console.log('Product names count:', await this.productName.count());
-        console.log('Product prices count:', await this.productPrice.count());
-
         return {
             name: await this.productName.innerText(),
             price: await this.productPrice.innerText()
