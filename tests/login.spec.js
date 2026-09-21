@@ -1,14 +1,9 @@
-import { test, expect } from '@playwright/test';
-import {LoginPage} from "../page-objects/Login.page";
-import {ProductsPage} from "../page-objects/Products.page";
+import { test, expect } from '../fixtures/fixtures';
 import {sunnyUser, lockedUser, wrongUser} from '../data/testData'
 
 test.describe('Login functionality', () => {
 
-    test('Sunny Day - Login', async ({ page }) => {
-
-        const loginPage = new LoginPage(page);
-        const productsPage = new ProductsPage(page);
+    test('Sunny Day - Login', async ({ loginPage, productsPage }) => {
 
         await test.step( 'Go to login page', async () => {
             await loginPage.navigateToPage();
@@ -32,8 +27,7 @@ test.describe('Login functionality', () => {
 
     });
 
-    test('Rainy Day - Login as locked user', async ({ page }) => {
-        const loginPage = new LoginPage(page);
+    test('Rainy Day - Login as locked user', async ({ loginPage }) => {
 
         await test.step( 'Go to login page', async () => {
             await loginPage.navigateToPage();
@@ -49,8 +43,7 @@ test.describe('Login functionality', () => {
 
     });
 
-    test('Rainy Day - Login with wrong credentials', async ({ page }) => {
-        const loginPage = new LoginPage(page);
+    test('Rainy Day - Login with wrong credentials', async ({ loginPage }) => {
 
         await test.step( 'Go to login page', async () => {
             await loginPage.navigateToPage();
@@ -66,10 +59,7 @@ test.describe('Login functionality', () => {
 
     });
 
-    test('Sunny Day - Login and Logout', async ({page}) => {
-
-        const loginPage = new LoginPage(page);
-        const productsPage = new ProductsPage(page);
+    test('Sunny Day - Login and Logout', async ({ loginPage, productsPage }) => {
 
         await test.step( 'Go to login page', async () => {
             await loginPage.navigateToPage();
