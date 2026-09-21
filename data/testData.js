@@ -10,6 +10,11 @@ export const lockedUser = {
     password: process.env.PASSWORD,
 }
 
+export const wrongUser = {
+    userName: 'wrong_user',
+    password: process.env.PASSWORD,
+}
+
 export const checkoutDetails={
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),

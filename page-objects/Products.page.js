@@ -18,6 +18,8 @@ export class ProductsPage {
         this.bikeLightLink = this.bikeLight.locator('[data-test="item-0-title-link"]');
         this.cartCount = this.page.locator('[data-test="shopping-cart-badge"]');
         this.cartButton = this.page.locator('[data-test="shopping-cart-link"]');
+        this.sideBarMenu = page.getByRole('button', { name: 'Open Menu' });
+        this.logoutFromSideBar = this.page.locator('[data-test="logout-sidebar-link"]');
     }
 
     async selectAddToCart() {
@@ -45,6 +47,14 @@ export class ProductsPage {
 
     async goToCart(){
         await this.cartButton.click()
+    }
+
+    async openSideBarMenu(){
+        await this.sideBarMenu.click()
+    }
+
+    async selectLogoutFromSideBarMenu(){
+        await this.logoutFromSideBar.click()
     }
 
 }
