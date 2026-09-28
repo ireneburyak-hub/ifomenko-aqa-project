@@ -6,6 +6,7 @@
   "scripts": {
     "test": "npx playwright test",
     "ui-e2e": "npx playwright test --project=e2e-tests",
+    "ui-products": "npx playwright test --project=products-tests",
     "test-debug": "npx playwright test --debug"
   },
   "private": true,

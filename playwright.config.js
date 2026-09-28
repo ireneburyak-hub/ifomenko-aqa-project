@@ -72,6 +72,16 @@ export default defineConfig({
         storageState: '.auth/user.json',
       },
     },
+    {
+      name: 'products-tests',
+      testMatch: /products.*\.spec\.js/,
+      dependencies: ['setup'],
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: process.env.UI_URL,
+        storageState: '.auth/user.json',
+      },
+    },
 
     // {
     //   name: 'firefox',
