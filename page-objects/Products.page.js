@@ -20,6 +20,10 @@ export class ProductsPage {
         this.cartButton = this.page.locator('[data-test="shopping-cart-link"]');
         this.sideBarMenu = page.getByRole('button', { name: 'Open Menu' });
         this.logoutFromSideBar = this.page.locator('[data-test="logout-sidebar-link"]');
+        this.sortDropdown = page.locator('[data-test="product-sort-container"]');
+        this.productNames = page.locator('[data-test="inventory-item-name"]');
+        this.productPrices = page.locator('data-test="inventory-item-price"');
+
     }
 
     async selectAddToCart() {
@@ -55,6 +59,10 @@ export class ProductsPage {
 
     async selectLogoutFromSideBarMenu(){
         await this.logoutFromSideBar.click()
+    }
+
+    async selectOption(option){
+        await this.sortDropdown.selectOption(option)
     }
 
 }
